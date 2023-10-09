@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body  style="background-color:#036f03">
+    
+
+    <canvas id="canvas" width="465" height="606" style="background: url('car/dorog.png')"></canvas>
+    
+    <!-- Основная часть  -->
+    
+    <script>
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+
+        // Создаем объекты Image для каждой машины
+        var car1 = new Image();
+        var car2 = new Image();
+        var car3 = new Image();
+        var car4 = new Image();
+        var car5 = new Image();
+        var car6 = new Image();
+
+        // Задаем пути к файлам изображений для каждой машины
+        car1.src = "car/carBel.png";
+        car2.src = "car/gruz.png";
+        car3.src = "car/carFiol.png";
+        car4.src = "car/carZel.png";
+        car5.src = "car/carZelL.png";
+        car6.src = "car/carBelS.png";
+
+    // Задаем начальные координаты и скорость для каждой машины
+    var car1X = 160;
+    var car1Y = 510;
+    var car1SpeedY = 3;
+
+    var car2X = 160;
+    var car2Y = 260;
+    var car2SpeedY = 3;
+
+    var car3X = 160;
+    var car3Y = 140;
+    var car3SpeedX = 0;
+    var car3SpeedY = 2;
+
+    var car4X = 160;
+    var car4Y = 10;
+    var car4SpeedY = 1.3;
+
+    var car5X = 270;
+    var car5Y = 500;
+    var car5SpeedX = 0;
+    var car5SpeedY = 1;
+
+    var car6X = 390;
+    var car6Y = 310;
+
+    var angle = 0;
+    var angle2 = 0;
+
+    // Функция для отрисовки машин на канвасе
+    function drawCars() {
+        if(car3Y<330){
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(car1, car1X, car1Y);
+        ctx.drawImage(car2, car2X, car2Y);
+        ctx.drawImage(car3, car3X, car3Y);
+        ctx.drawImage(car4, car4X, car4Y);
+        ctx.drawImage(car5, car5X, car5Y);
+        ctx.drawImage(car6, car6X, car6Y);
+        }
+        else if(car3Y>=328 && car3X>-60){
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.translate(car3X, car3Y);
+            ctx.rotate(angle * Math.PI / 180);
+            ctx.drawImage(car3, -car3.width / 2, -car3.height / 2);
+            ctx.rotate(-angle * Math.PI / 180);
+            ctx.translate(-car3X, -car3Y);
+            ctx.drawImage(car1, car1X, car1Y);
+            ctx.drawImage(car2, car2X, car2Y);
+            ctx.drawImage(car4, car4X, car4Y);
+            ctx.drawImage(car5, car5X, car5Y);
+            ctx.drawImage(car6, car6X, car6Y);
+        
+        }
+        else if(car4Y>330){
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.translate(car5X, car5Y);
+            ctx.rotate(-angle2 * Math.PI / 180);
+            ctx.drawImage(car5, -car5.width / 2, -car5.height / 2);
+            ctx.rotate(angle2 * Math.PI / 180);
+            ctx.translate(-car5X, -car5Y);
+            ctx.drawImage(car4, car4X, car4Y);
+            ctx.drawImage(car6, car6X, car6Y);
+        }
+    }
+
+    // Функция для обновления координат машин и проверки условий движения
+    function update() {
+        // Движение машины 1
+        if (car1Y < 700) {
+            car1Y += car1SpeedY;
+        }
+
+        // Движение машины 2
+        if (car2Y > 100) {
+            car2Y += car2SpeedY;
+        }
+
+        // Движение машины 3
+        if (car3Y < 330) {
+            car3Y += car3SpeedY;
+        }
+        else if(angle<90){
+            angle +=2.5;
+            car3X -=0.8;
+        }
+        else if(car3X>-60){
+            car3X -= 2;
+            car3.src = "car/carFi.png";
+        }
+        
+
+        // Движение машины 4
+        if (car4Y < 700) {
+            car4Y += car4SpeedY;
+        }
+
+        // Движение машины 5
+        if (car5Y > 330) {
+            car5Y -= car5SpeedY;
+        }
+        else if(angle2 <90 && car4Y > 335){
+            angle2 += 2;
+        }
+        else if(car4Y > 360){
+            car5X -= 2;
+            car5.src = "car/carZeP.png";
+        }
+
+        // Отрисовка обновленных координат машин
+        drawCars();
+
+        // Вызов функции update на каждом кадре анимации
+        requestAnimationFrame(update);
+    }
+
+    // Загрузка изображений машин перед запуском анимации
+    car1.onload = function() {
+        car2.onload = function() {
+            car3.onload = function() {
+                car4.onload = function() {
+                    car5.onload = function() {
+                        car6.onload = function(){
+                            update();
+                            // Запуск анимации после загрузки всех изображений
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    </script>
+</body>
+</html>
